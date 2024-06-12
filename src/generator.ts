@@ -1,11 +1,11 @@
 import path from 'path'
+import { DMMF } from '@prisma/generator-helper'
 import {
   ImportDeclarationStructure,
   SourceFile,
   StructureKind,
   VariableDeclarationKind,
 } from 'ts-morph'
-import { DMMF } from '@prisma/generator-helper'
 import { Config, PrismaOptions } from './config'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
@@ -27,23 +27,21 @@ export const writeImportsForModel = (
     },
   ]
 
-  if(config.enableOpenAPI)
-    {
-      // ability to use openapi in nestjs-zod
-      importList.push({
-        kind: StructureKind.ImportDeclaration,
-        namedImports: ['$Enums'],
-        moduleSpecifier: '@prisma/client',
-      })
+  if (config.enableOpenAPI) {
+    // ability to use openapi in nestjs-zod
+    importList.push({
+      kind: StructureKind.ImportDeclaration,
+      namedImports: ['$Enums'],
+      moduleSpecifier: '@prisma/client',
+    })
 
-        // ability to use openapi in nestjs-zod
-      importList.push({
-        kind: StructureKind.ImportDeclaration,
-        namedImports: ['extendZodWithOpenApi'],
-        moduleSpecifier: '@anatine/zod-openapi',
-      })
-
-    }
+    // ability to use openapi in nestjs-zod
+    importList.push({
+      kind: StructureKind.ImportDeclaration,
+      namedImports: ['extendZodWithOpenApi'],
+      moduleSpecifier: '@anatine/zod-openapi',
+    })
+  }
 
   if (config.generateDto) {
     importList.push({
@@ -239,7 +237,7 @@ export const generateRelatedSchemaForModel = (
       '',
       '/**',
       ` * ${relatedModelName(
-        `${model.name}?`
+        model.name
       )} contains all relations on your model in addition to the scalars`,
       ' *',
       ' * NOTE: Lazy required in case of potential circular dependencies within schema',
@@ -263,7 +261,7 @@ export const generateRelatedSchemaForModel = (
 
                 writer
                   .write(
-                    `${field.name}: ${getZodConstructor(
+                    `${field.name}?: ${getZodConstructor(
                       field,
                       relatedModelName
                     )}`
