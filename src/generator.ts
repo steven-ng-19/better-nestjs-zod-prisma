@@ -222,7 +222,7 @@ export const generateRelatedSchemaForModel = (
   const relationFields = model.fields.filter((f) => f.kind === 'object')
 
   sourceFile.addInterface({
-    name: `Complete${model.name}?`,
+    name: `Complete${model.name}`,
     isExported: true,
     extends: [`z.infer<typeof ${modelName(model.name)}>`],
     properties: relationFields.map((f) => ({
@@ -239,7 +239,7 @@ export const generateRelatedSchemaForModel = (
       '',
       '/**',
       ` * ${relatedModelName(
-        model.name
+        `${model.name}?`
       )} contains all relations on your model in addition to the scalars`,
       ' *',
       ' * NOTE: Lazy required in case of potential circular dependencies within schema',
