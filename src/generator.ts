@@ -225,10 +225,10 @@ export const generateRelatedSchemaForModel = (
     extends: [`z.infer<typeof ${modelName(model.name)}>`],
     properties: relationFields.map((f) => ({
       hasQuestionToken: !f.isRequired,
-      name: f.name,
+      name: `${f.name}?`,
       type: `Complete${f.type}${f.isList ? '[]' : ''}${
         !f.isRequired ? ' | null' : ''
-      }?`,
+      }`,
     })),
   })
 

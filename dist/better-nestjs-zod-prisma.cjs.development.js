@@ -292,8 +292,8 @@ const generateRelatedSchemaForModel = (model, sourceFile, config, _prismaOptions
     extends: [`z.infer<typeof ${modelName(model.name)}>`],
     properties: relationFields.map(f => ({
       hasQuestionToken: !f.isRequired,
-      name: f.name,
-      type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}?`
+      name: `${f.name}?`,
+      type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`
     }))
   });
   sourceFile.addStatements(writer => writeArray(writer, ['', '/**', ` * ${relatedModelName(model.name)} contains all relations on your model in addition to the scalars`, ' *', ' * NOTE: Lazy required in case of potential circular dependencies within schema', ' */']));
