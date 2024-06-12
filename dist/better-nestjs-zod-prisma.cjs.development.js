@@ -231,13 +231,15 @@ const writeImportsForModel = (model, sourceFile, config, {
     }
   }
   sourceFile.addImportDeclarations(importList);
-  sourceFile.addVariableStatement({
-    declarationKind: tsMorph.VariableDeclarationKind.Const,
-    declarations: [{
-      initializer: writer => writer.write('extendZodWithOpenApi(z)'),
-      name: 'zodOpenApi'
-    }]
-  });
+  if (config.enableOpenAPI) {
+    sourceFile.addVariableStatement({
+      declarationKind: tsMorph.VariableDeclarationKind.Const,
+      declarations: [{
+        initializer: writer => writer.write('extendZodWithOpenApi(z)'),
+        name: 'zodOpenApi'
+      }]
+    });
+  }
 };
 const writeTypeSpecificSchemas = (model, sourceFile, config, _prismaOptions) => {
   if (config.useDecimalJs && model.fields.some(f => f.type === 'Decimal')) {

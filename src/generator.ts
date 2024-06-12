@@ -119,15 +119,17 @@ export const writeImportsForModel = (
 
   sourceFile.addImportDeclarations(importList)
 
-  sourceFile.addVariableStatement({
-    declarationKind: VariableDeclarationKind.Const,
-    declarations: [
-      {
-        initializer: (writer) => writer.write('extendZodWithOpenApi(z)'),
-        name: 'zodOpenApi',
-      },
-    ],
-  })
+  if (config.enableOpenAPI) {
+    sourceFile.addVariableStatement({
+      declarationKind: VariableDeclarationKind.Const,
+      declarations: [
+        {
+          initializer: (writer) => writer.write('extendZodWithOpenApi(z)'),
+          name: 'zodOpenApi',
+        },
+      ],
+    })
+  }
 }
 
 export const writeTypeSpecificSchemas = (
