@@ -228,7 +228,7 @@ export const generateRelatedSchemaForModel = (
       name: f.name,
       type: `Complete${f.type}${f.isList ? '[]' : ''}${
         !f.isRequired ? ' | null' : ''
-      }`,
+      }?`,
     })),
   })
 
@@ -261,7 +261,7 @@ export const generateRelatedSchemaForModel = (
 
                 writer
                   .write(
-                    `${field.name}?: ${getZodConstructor(
+                    `${field.name}: ${getZodConstructor(
                       field,
                       relatedModelName
                     )}`

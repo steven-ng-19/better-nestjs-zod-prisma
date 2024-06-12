@@ -293,7 +293,7 @@ const generateRelatedSchemaForModel = (model, sourceFile, config, _prismaOptions
     properties: relationFields.map(f => ({
       hasQuestionToken: !f.isRequired,
       name: f.name,
-      type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}`
+      type: `Complete${f.type}${f.isList ? '[]' : ''}${!f.isRequired ? ' | null' : ''}?`
     }))
   });
   sourceFile.addStatements(writer => writeArray(writer, ['', '/**', ` * ${relatedModelName(model.name)} contains all relations on your model in addition to the scalars`, ' *', ' * NOTE: Lazy required in case of potential circular dependencies within schema', ' */']));
@@ -307,7 +307,7 @@ const generateRelatedSchemaForModel = (model, sourceFile, config, _prismaOptions
         writer.write(`z.lazy(() => ${modelName(model.name)}.extend(`).inlineBlock(() => {
           relationFields.forEach(field => {
             writeArray(writer, getJSDocs(field.documentation));
-            writer.write(`${field.name}?: ${getZodConstructor(field, relatedModelName)}`).write(',').newLine();
+            writer.write(`${field.name}: ${getZodConstructor(field, relatedModelName)}`).write(',').newLine();
           });
         }).write('))');
       }
