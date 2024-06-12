@@ -8,7 +8,7 @@ const mapScalarType: Record<string, string> = {
   DateTime: 'z.date()',
   Float: 'z.number()',
   Decimal: 'z.number()',
-  Json: 'z.json()',
+  Json: 'z.string()',
   Boolean: 'z.boolean()',
   Bytes: 'z.instanceOf(Buffer)',
 }

@@ -14,6 +14,7 @@ export const configSchema = z.object({
   useDecimalJs: configBoolean.default('false'),
   imports: z.string().optional(),
   prismaJsonNullability: configBoolean.default('true'),
+  enableOpenAPI: configBoolean.default('false')
 })
 
 export type Config = z.infer<typeof configSchema>

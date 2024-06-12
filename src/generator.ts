@@ -1,11 +1,11 @@
 import path from 'path'
-import { DMMF } from '@prisma/generator-helper'
 import {
   ImportDeclarationStructure,
   SourceFile,
   StructureKind,
   VariableDeclarationKind,
 } from 'ts-morph'
+import { DMMF } from '@prisma/generator-helper'
 import { Config, PrismaOptions } from './config'
 import { getJSDocs } from './docs'
 import { getZodConstructor } from './types'
@@ -27,19 +27,23 @@ export const writeImportsForModel = (
     },
   ]
 
-  // ability to use openapi in nestjs-zod
-  importList.push({
-    kind: StructureKind.ImportDeclaration,
-    namedImports: ['extendZodWithOpenApi'],
-    moduleSpecifier: '@anatine/zod-openapi',
-  })
+  if(config.enableOpenAPI)
+    {
+      // ability to use openapi in nestjs-zod
+      importList.push({
+        kind: StructureKind.ImportDeclaration,
+        namedImports: ['$Enums'],
+        moduleSpecifier: '@prisma/client',
+      })
 
-  // ability to use openapi in nestjs-zod
-  importList.push({
-    kind: StructureKind.ImportDeclaration,
-    namedImports: ['$Enums'],
-    moduleSpecifier: '@prisma/client',
-  })
+        // ability to use openapi in nestjs-zod
+      importList.push({
+        kind: StructureKind.ImportDeclaration,
+        namedImports: ['extendZodWithOpenApi'],
+        moduleSpecifier: '@anatine/zod-openapi',
+      })
+
+    }
 
   if (config.generateDto) {
     importList.push({
@@ -218,7 +222,7 @@ export const generateRelatedSchemaForModel = (
   const relationFields = model.fields.filter((f) => f.kind === 'object')
 
   sourceFile.addInterface({
-    name: `Complete${model.name}`,
+    name: `Complete${model.name}?`,
     isExported: true,
     extends: [`z.infer<typeof ${modelName(model.name)}>`],
     properties: relationFields.map((f) => ({
